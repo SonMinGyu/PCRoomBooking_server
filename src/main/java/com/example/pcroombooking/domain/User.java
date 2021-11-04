@@ -2,6 +2,8 @@ package com.example.pcroombooking.domain;
 
 //import com.example.pcroombooking.domain.Authority.Authority;
 import com.example.pcroombooking.domain.baseEntity.TimeBaseEntity;
+import com.example.pcroombooking.dto.UserLoginResponse;
+import com.example.pcroombooking.dto.UserRegisterResponse;
 import lombok.*;
 
 import javax.persistence.*;
@@ -42,5 +44,18 @@ public class User extends TimeBaseEntity {
 
     @OneToOne(mappedBy = "user")
     private Seat seat; // 사용중인 좌석, 읽기 전용
+
+    public UserRegisterResponse toUserRegisterResponse() {
+        return UserRegisterResponse.builder()
+                .name(getName())
+                .email(getEmail())
+                .build();
+    }
+
+    public UserLoginResponse toUserLoginResponse() {
+        return UserLoginResponse.builder()
+                .email(getEmail())
+                .build();
+    }
 
 }
