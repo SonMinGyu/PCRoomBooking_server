@@ -1,12 +1,16 @@
 package com.example.pcroombooking.domain;
 
 //import com.example.pcroombooking.domain.Authority.Authority;
+import com.example.pcroombooking.domain.Authority.Authority;
 import com.example.pcroombooking.domain.baseEntity.TimeBaseEntity;
 import com.example.pcroombooking.dto.UserLoginResponse;
 import com.example.pcroombooking.dto.UserRegisterResponse;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -17,7 +21,7 @@ import java.util.Set;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class User extends TimeBaseEntity {
+public class User extends TimeBaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +40,15 @@ public class User extends TimeBaseEntity {
 
     private String major;
 
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(foreignKey = @ForeignKey(name = "userId"))
-//    private Set<Authority> authorities; // 학생, 교수님 구분
-
-    private boolean enabled;
-
     @OneToOne(mappedBy = "user")
     private Seat seat; // 사용중인 좌석, 읽기 전용
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(foreignKey = @ForeignKey(name = "userId"))
+    @ToString.Exclude
+    private Set<Authority> authorities;
+
+    private boolean enabled;
 
     public UserRegisterResponse toUserRegisterResponse() {
         return UserRegisterResponse.builder()
@@ -52,10 +57,29 @@ public class User extends TimeBaseEntity {
                 .build();
     }
 
-    public UserLoginResponse toUserLoginResponse() {
-        return UserLoginResponse.builder()
-                .email(getEmail())
-                .build();
+//    public UserLoginResponse toUserLoginResponse() {
+//        return UserLoginResponse.builder()
+//                .email(getEmail())
+//                .build();
+//    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return enabled;
+    }
 }

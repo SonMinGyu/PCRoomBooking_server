@@ -8,6 +8,9 @@ import com.example.pcroombooking.dto.UserRegisterRequest;
 import com.example.pcroombooking.dto.UserRegisterResponse;
 import com.example.pcroombooking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +20,18 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    public Optional<User> findUser(Long userId) {
+        return userRepository.findById(userId);
+    }
 
     // client에서 UserRegisterRequest를 server로 POST 하면
     // server에서 UserRegisterRequest를 User로 변환하고 db에 저장
@@ -28,28 +40,7 @@ public class UserService {
         return userRepository.save(userRegisterRequest.toEntity()).toUserRegisterResponse();
     }
 
-    public UserLoginResponse loginUserInfo(UserLoginRequest userLoginRequest) {
 
-        Optional<User> loginUser = userRepository.findByEmail(userLoginRequest.getEmail());
-
-        if(loginUser.isPresent()) {
-            if(userLoginRequest.getPassword().equals(loginUser.get().getPassword())) {
-                return loginUser.get().toUserLoginResponse();
-            } else {
-                return UserLoginResponse.builder()
-                        .email("fail")
-                        .build();
-            }
-        } else {
-            return UserLoginResponse.builder()
-                    .email("null")
-                    .build();
-        }
-    }
-
-    public Optional<User> findUser(Long userId) {
-        return userRepository.findById(userId);
-    }
 
 //    public void addAuthority(Long userId, String authority) {
 //        userRepository.findById(userId).ifPresent(user -> {
