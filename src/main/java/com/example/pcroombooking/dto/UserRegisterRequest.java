@@ -21,6 +21,8 @@ public class UserRegisterRequest {
 
     private String major;
 
+    private String cryptogram;
+
     public User toEntity() {
         return User.builder()
                 .name(getName())

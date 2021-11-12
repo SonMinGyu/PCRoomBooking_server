@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserRegisterResponse {
-    private String name;
-    private String email;
-    private int resultCode;
-    private String result;
-    private String message;
+public class CryptogramRequest {
+
+    private String inputCryptogram;
+
+    private String inputEmail;
+
 }

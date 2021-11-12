@@ -6,12 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class UserRegisterResponse {
-    private String name;
-    private String email;
+public class EmailSendResponse {
     private int resultCode;
     private String result;
     private String message;

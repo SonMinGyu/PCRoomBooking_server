@@ -1,20 +1,17 @@
 package com.example.pcroombooking.controller;
 
+import com.example.pcroombooking.domain.Cryptogram;
+import com.example.pcroombooking.repository.CryptogramRepository;
+import com.example.pcroombooking.service.CryptogramService;
+import com.example.pcroombooking.service.MailService;
 import com.example.pcroombooking.config.JwtTokenProvider;
-import com.example.pcroombooking.domain.User;
-import com.example.pcroombooking.dto.UserLoginRequest;
-import com.example.pcroombooking.dto.UserLoginResponse;
-import com.example.pcroombooking.dto.UserRegisterRequest;
-import com.example.pcroombooking.dto.UserRegisterResponse;
-import com.example.pcroombooking.repository.UserRepository;
+import com.example.pcroombooking.dto.*;
 import com.example.pcroombooking.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -22,6 +19,9 @@ import java.util.List;
 public class ApiController {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final MailService mailService;
+    private final CryptogramService cryptogramService;
+    private final CryptogramRepository cryptogramRepository;
 
 //    만약 어떤 resource를 식별하고 싶으면 Path Variable을 사용하고,
 //    정렬이나 필터링을 한다면 Query Parameter를 사용하는 것이 Best Practice이다.
@@ -29,11 +29,6 @@ public class ApiController {
     private final UserService userService;
 //    private final UserRepository userRepository;
 
-    @GetMapping("/getMessage")
-    public String getMessage() {
-
-        return "성공";
-    }
 
     @GetMapping("/user/test")
     public String test() {
@@ -56,23 +51,49 @@ public class ApiController {
     @PostMapping("/user/login")
     public UserLoginResponse login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
         // jwtToken 을 만들어서 userLoginResponse에 담아서 return 하자
-        User loginUser = userService.loadUserByUsername(userLoginRequest.getEmail());
-
-        String token = jwtTokenProvider.createJwtToken(loginUser.getEmail(), loginUser.getAuthorities());
 
 //        httpServletResponse.setHeader("Authorization", token);
 
-        return UserLoginResponse.builder()
-                .jwtToken(token)
-                .resultCode(200)
-                .result("Login success")
-                .message("로그인에 성공하였습니다.")
-                .build();
+
+        UserLoginResponse userLoginResponse = userService.loginUserInfo(userLoginRequest);
+
+        if(userLoginResponse.getResultCode() == 200) {
+            String token = jwtTokenProvider.createJwtToken(userLoginResponse.getEmail(), userLoginResponse.getAuthorities());
+            userLoginResponse.setJwtToken(token);
+        }
+
+        return userLoginResponse;
     }
 
     @PostMapping("/user/register")
     public UserRegisterResponse register(@RequestBody UserRegisterRequest userRegisterRequest) {
-        return userService.registUser(userRegisterRequest);
+        Optional<Cryptogram> getCrt = cryptogramService.getCryptogram(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail());
+        Optional<Cryptogram> getCrt2 = cryptogramRepository.findByCryptogramAndTargetEmail(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail());
+
+        System.out.println("!!!!!!!!!!!!!!!!!" + getCrt.isPresent());
+        System.out.println("222222222222222222" + getCrt2.isPresent());
+
+        if(getCrt.isPresent() && getCrt.get().isVerified()) {
+            return userService.registUser(userRegisterRequest);
+        } else {
+            return UserRegisterResponse.builder()
+                    .resultCode(401)
+                    .result("Register fail")
+                    .message("문자열 인증이 완료되지 않았습니다.")
+                    .build();
+        }
+    }
+
+    // gmail.com 들어가서 보안 설정해야 mail 전송가능
+    @PostMapping("/user/register/mail")
+    private EmailSendResponse sendMailForRegister(@RequestBody EmailSendRequest emailSendRequest) {
+        return mailService.gmailSend(emailSendRequest);
+    }
+
+    @PostMapping("/user/register/cryptogram")
+    public CryptogramResponse verityCryptogram(@RequestBody CryptogramRequest cryptogramRequest) {
+        return cryptogramService.vefiryCryptogram(cryptogramRequest.getInputCryptogram(), cryptogramRequest.getInputEmail())
+                .toCryptogramResponse();
     }
 
 }

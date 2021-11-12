@@ -1,5 +1,6 @@
 package com.example.pcroombooking.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserRegisterResponse {
-    private String name;
-    private String email;
-    private int resultCode;
-    private String result;
-    private String message;
+public class EmailSendRequest {
+    @JsonProperty("user_email")
+    private String userEmail;
 }
