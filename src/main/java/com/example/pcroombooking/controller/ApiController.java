@@ -1,6 +1,8 @@
 package com.example.pcroombooking.controller;
 
 import com.example.pcroombooking.domain.Cryptogram;
+import com.example.pcroombooking.exception.SuperException;
+import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 import com.example.pcroombooking.repository.CryptogramRepository;
 import com.example.pcroombooking.service.CryptogramService;
 import com.example.pcroombooking.service.MailService;
@@ -54,7 +56,6 @@ public class ApiController {
 
 //        httpServletResponse.setHeader("Authorization", token);
 
-
         UserLoginResponse userLoginResponse = userService.loginUserInfo(userLoginRequest);
 
         if(userLoginResponse.getResultCode() == 200) {
@@ -67,21 +68,7 @@ public class ApiController {
 
     @PostMapping("/user/register")
     public UserRegisterResponse register(@RequestBody UserRegisterRequest userRegisterRequest) {
-        Optional<Cryptogram> getCrt = cryptogramService.getCryptogram(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail());
-        Optional<Cryptogram> getCrt2 = cryptogramRepository.findByCryptogramAndTargetEmail(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail());
-
-        System.out.println("!!!!!!!!!!!!!!!!!" + getCrt.isPresent());
-        System.out.println("222222222222222222" + getCrt2.isPresent());
-
-        if(getCrt.isPresent() && getCrt.get().isVerified()) {
-            return userService.registUser(userRegisterRequest);
-        } else {
-            return UserRegisterResponse.builder()
-                    .resultCode(401)
-                    .result("Register fail")
-                    .message("문자열 인증이 완료되지 않았습니다.")
-                    .build();
-        }
+        return userService.registUser(userRegisterRequest);
     }
 
     // gmail.com 들어가서 보안 설정해야 mail 전송가능

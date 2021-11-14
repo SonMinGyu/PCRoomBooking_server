@@ -1,13 +1,13 @@
 package com.example.pcroombooking.service;
 
 import com.example.pcroombooking.domain.Cryptogram;
+import com.example.pcroombooking.exception.SuperException;
+import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 import com.example.pcroombooking.repository.CryptogramRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -29,18 +29,16 @@ public class CryptogramService {
     }
 
     public Cryptogram vefiryCryptogram(String inputCryptogram, String inputEmail) {
-        Cryptogram crt = cryptogramRepository.findByCryptogramAndTargetEmail(inputCryptogram, inputEmail)
-        .orElseThrow(() -> new UsernameNotFoundException(inputCryptogram));
+        Cryptogram crt = cryptogramRepository.findByCryptogramAndTargetEmailOrderByCreatedAtDesc(inputCryptogram, inputEmail)
+        .orElseThrow(() -> new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_FOUNT_EXCEPTION));
 
-        if(!LocalDateTime.now().isBefore(crt.getCreatedAt().plusMinutes(3))) {
+        if(!LocalDateTime.now().isBefore(crt.getCreatedAt().plusMinutes(1))) {
             // 유효기간 만료된 토큰
-            // 추후 exception 발생시키자
             System.out.println("This cryptogram is expired!!!");
-
-            return crt;
+            throw new SuperException(CustomExceptionType.CRYPTOGRAM_EXPIRED_EXCEPTION);
         } else {
             Long id = crt.getId();
-            Cryptogram findByIdCrt = cryptogramRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(id.toString()));
+            Cryptogram findByIdCrt = cryptogramRepository.findById(id).orElseThrow(() -> new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_FOUNT_EXCEPTION));
             findByIdCrt.setVerified(true);
 
             return cryptogramRepository.save(findByIdCrt);
@@ -48,11 +46,12 @@ public class CryptogramService {
     }
 
     public Optional<Cryptogram> getCryptogram(String cryptogram, String email) {
-        return cryptogramRepository.findByCryptogramAndTargetEmail(cryptogram, email);
+        return cryptogramRepository.findByCryptogramAndTargetEmailOrderByCreatedAtDesc(cryptogram, email);
     }
 
+    // 수정필요
     public void deleteCryptogram(String cryptogram, String email) {
-        Long id = cryptogramRepository.findByCryptogramAndTargetEmail(cryptogram, email).get().getId();
+        Long id = cryptogramRepository.findByCryptogramAndTargetEmailOrderByCreatedAtDesc(cryptogram, email).get().getId();
         cryptogramRepository.deleteById(id);
     }
 }

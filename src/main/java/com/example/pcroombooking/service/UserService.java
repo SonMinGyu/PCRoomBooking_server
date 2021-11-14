@@ -1,26 +1,26 @@
 package com.example.pcroombooking.service;
 
 //import com.example.pcroombooking.domain.Authority.Authority;
-import com.example.pcroombooking.config.JwtTokenProvider;
+import com.example.pcroombooking.domain.Cryptogram;
 import com.example.pcroombooking.domain.User;
 import com.example.pcroombooking.dto.UserLoginRequest;
 import com.example.pcroombooking.dto.UserLoginResponse;
 import com.example.pcroombooking.dto.UserRegisterRequest;
 import com.example.pcroombooking.dto.UserRegisterResponse;
+import com.example.pcroombooking.exception.EmailNotFoundException;
+import com.example.pcroombooking.exception.SuperException;
+import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
+import com.example.pcroombooking.repository.CryptogramRepository;
 import com.example.pcroombooking.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,11 +28,12 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final CryptogramRepository cryptogramRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+    public User loadUserByUsername(String username) throws EmailNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new EmailNotFoundException(CustomExceptionType.EMAIL_NOT_FOUND_EXCEPTION));
     }
 
     public UserLoginResponse loginUserInfo(UserLoginRequest userLoginRequest) {
@@ -40,7 +41,6 @@ public class UserService implements UserDetailsService {
         User user = loadUserByUsername(userLoginRequest.getEmail());
 
         if(passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
-
             return UserLoginResponse.builder()
                     .resultCode(200)
                     .result("Login Success")
@@ -49,13 +49,7 @@ public class UserService implements UserDetailsService {
                     .authorities(user.getAuthorities())
                     .build();
         } else {
-            // 현재 email 이 없을시 UsernameNotFoundException 발생
-            // 비밀번호 오류시 Exception 발생 시켜서 처리하는 것으로 바꾸자
-            return UserLoginResponse.builder()
-                    .resultCode(401)
-                    .result("Login Fail")
-                    .message("비밀번호가 틀렸습니다.")
-                    .build();
+            throw new SuperException(CustomExceptionType.WRONG_PASSWORD_EXCEPTION);
         }
     }
 
@@ -63,8 +57,18 @@ public class UserService implements UserDetailsService {
     // server에서 UserRegisterRequest를 User로 변환하고 db에 저장
     // 그리고 User를 UserRegisterResponse로 변환해서 response
     public UserRegisterResponse registUser(UserRegisterRequest userRegisterRequest) {
+        // 현재는 cryptogram 가져와서 isVerified가 true면 인증 완료된 것으로 처리하고있음.
+        // frontEnd 에서 cryptogram 인증 받으면 변수(isVerified)를 true로 바꾸어서 회원가입 버튼 클릭 가능하게하는 방법도 고려.
+        Cryptogram cryptogram = cryptogramRepository.findByCryptogramAndTargetEmailOrderByCreatedAtDesc(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail())
+                .orElseThrow(() -> new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_FOUNT_EXCEPTION));
+
+        if(!cryptogram.isVerified()) {
+            throw new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_VERIFIED_EXCEPTION);
+        }
+
         String userPassword = userRegisterRequest.getPassword();
         String encodedPassword = passwordEncoder.encode(userPassword);
+
 
         UserRegisterRequest newUserRegisterRequest = UserRegisterRequest.builder()
                 .name(userRegisterRequest.getName())
@@ -78,6 +82,15 @@ public class UserService implements UserDetailsService {
         savedUserResponse.setResultCode(200);
         savedUserResponse.setResult("Register Success");
         savedUserResponse.setMessage("회원가입에 성공하셨습니다.");
+
+        // 회원가입 완료한 cryptogram 삭제
+        List<Cryptogram> deleteCryptogramList = cryptogramRepository.findByCryptogramAndTargetEmail(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail())
+                .orElseThrow(() -> new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_FOUNT_EXCEPTION));
+
+        List<Long> deleteIdList = deleteCryptogramList.stream().map(s -> s.getId()).collect(Collectors.toList());
+
+        cryptogramRepository.deleteAllById(deleteIdList);
+
         return savedUserResponse;
     }
 

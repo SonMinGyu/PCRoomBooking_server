@@ -1,8 +1,11 @@
 package com.example.pcroombooking.service;
 
+import com.example.pcroombooking.OuterProperties.EmailProperties;
 import com.example.pcroombooking.domain.Cryptogram;
 import com.example.pcroombooking.dto.EmailSendRequest;
 import com.example.pcroombooking.dto.EmailSendResponse;
+import com.example.pcroombooking.exception.SuperException;
+import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -22,30 +25,19 @@ import java.util.Random;
 public class MailService {
 
     private final CryptogramService cryptogramService;
+    private final EmailProperties emailProperties;
 
     public EmailSendResponse gmailSend(EmailSendRequest emailSendRequest) {
 
-        String user1 = "";
-        String password1 = "";
+        // 외부 properties 에서 email, password 가져오기
+        emailProperties.initEmailProperties();
 
-        try {
-            FileReader resources= new FileReader("C:/Users/littl/IdeaProjects/pcRoomBooking_config/email_config.properties");
-            Properties properties = new Properties();
-
-            properties.load(resources);
-            user1 = properties.get("email").toString();
-            password1 = properties.get("password").toString();
-            System.out.println("user1!!!!!!!" + user1);
-            System.out.println("password1!!!!!!!" + password1);
-
-        } catch (Exception e) {
-            System.out.println("email_config file read error");
-        }
-
-
-        String user = "아이디"; // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
-        String password = "비밀번호";   // 패스워드
+        String user = emailProperties.getEmail(); // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
+        String password = emailProperties.getPassword();   // 패스워드
         String targetEmail = emailSendRequest.getUserEmail();
+
+        System.out.println("user1!!!!!!!" + user);
+        System.out.println("password1!!!!!!!" + password);
 
         // SMTP 서버 정보를 설정한다.
         Properties prop = new Properties();
@@ -82,16 +74,10 @@ public class MailService {
                     .toString().toUpperCase();
             System.out.println(cryptogram);
 
-            // Email 인증 요청을 여러번하면 먼저 생성되었던 Cryptogram 삭제
-//            Optional<Cryptogram> oc = cryptogramService.getCryptogram(cryptogram, targetEmail);
-//            if(oc != null) {
-//                cryptogramService.deleteCryptogram(cryptogram, targetEmail);
-//            }
-
             // Cryptogram db에 저장
             if(!cryptogramService.addCryptogram(cryptogram, targetEmail).getTargetEmail().equals(targetEmail)) {
                 System.out.println("Cryptogram 저장 실패!!!!!!!!!!");
-                // 추후 exception 발생시키기기
+                throw new SuperException(CustomExceptionType.CRYPTOGRAM_SAVE_EXCEPTION);
             }
 
             // Text
@@ -119,8 +105,6 @@ public class MailService {
                 .message("메일을 성공적으로 발송했습니다.")
                 .build();
     }
-
-
 
 }
 
