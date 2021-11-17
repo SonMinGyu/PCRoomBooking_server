@@ -1,6 +1,8 @@
 package com.example.pcroombooking.domain;
 
 import com.example.pcroombooking.domain.baseEntity.TimeBaseEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,6 +39,7 @@ public class PCRoom extends TimeBaseEntity {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "seatId"))
+    @JsonManagedReference
     @ToString.Exclude
     private Set<Seat> seats;
 

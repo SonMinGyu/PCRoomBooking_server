@@ -14,7 +14,9 @@ public enum CustomExceptionType {
     // register cryptogram 만료시 발생
     CRYPTOGRAM_NOT_VERIFIED_EXCEPTION(1004, 200, "문자열 인증이 완료되지 않았습니다. 인증을 완료해주세요."),
     // register cryptogram 인증이 완료되지 않았을 때 발생
-    CRYPTOGRAM_SAVE_EXCEPTION(1005, 200, "오류로 인해 문자열이 저장되지 않았습니다.");
+    CRYPTOGRAM_SAVE_EXCEPTION(1005, 200, "오류로 인해 문자열이 저장되지 않았습니다."), // 문자열 저장 실패
+    PCROOM_NOT_FOUND_EXCEPTION(1006, 200, "사용가능한 PC실이 검색되지 않았습니다."), // 사용가능한 PC실이 없을 때
+    SEAT_NOT_IN_PCROOM_EXCEPTION(1007, 200, "해당 PC실의 좌석이 검색되지 않았습니다."); // 해당 PC실의 좌석이 없을 때
 
     private int errorCode;
     private int httpStatus;

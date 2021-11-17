@@ -1,22 +1,17 @@
 package com.example.pcroombooking.service;
 
-import com.example.pcroombooking.OuterProperties.EmailProperties;
-import com.example.pcroombooking.domain.Cryptogram;
+import com.example.pcroombooking.outerProperties.EmailProperties;
 import com.example.pcroombooking.dto.EmailSendRequest;
 import com.example.pcroombooking.dto.EmailSendResponse;
 import com.example.pcroombooking.exception.SuperException;
 import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.FileReader;
-import java.util.Locale;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.Random;
 
@@ -35,9 +30,6 @@ public class MailService {
         String user = emailProperties.getEmail(); // 네이버일 경우 네이버 계정, gmail경우 gmail 계정
         String password = emailProperties.getPassword();   // 패스워드
         String targetEmail = emailSendRequest.getUserEmail();
-
-        System.out.println("user1!!!!!!!" + user);
-        System.out.println("password1!!!!!!!" + password);
 
         // SMTP 서버 정보를 설정한다.
         Properties prop = new Properties();

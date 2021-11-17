@@ -1,6 +1,7 @@
 package com.example.pcroombooking.domain;
 
 import com.example.pcroombooking.domain.baseEntity.TimeBaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"pcRoom"})
 public class Seat extends TimeBaseEntity {
 
     @Id
@@ -19,6 +20,7 @@ public class Seat extends TimeBaseEntity {
     private Long seatId;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
     private PCRoom pcRoom; // 좌석이 어느 PC실에 있는가
 
     @NonNull

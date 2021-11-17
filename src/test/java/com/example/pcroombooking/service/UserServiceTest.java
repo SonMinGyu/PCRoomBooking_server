@@ -33,30 +33,34 @@ class UserServiceTest {
 
 //        userService.addAuthority(1L, "Student");
 
-        User user1 = userRepository.findUserById(1L);
 
-        PCRoom sixFloorPCRoom = pcRoomRepository.findPCRoomById(1L);
+        ////////////////////////////////
 
-        Seat newSeat = Seat.builder()
-                .seatName("A1")
-                .pcRoom(sixFloorPCRoom)
-                .isUsing(true)
-                .enabled(true)
-                .user(user1)
-                .build();
 
-        Seat newSeat1 = new Seat();
-        newSeat1.setSeatName("A2");
-        newSeat1.setPcRoom(sixFloorPCRoom);
-        newSeat1.setUsing(false);
-        newSeat1.setEnabled(true);
-
-        seatRepository.save(newSeat);
-        seatRepository.save(newSeat1);
-
-        seatRepository.findAll().forEach(seat -> {
-            System.out.println(seat);
-        });
+//        User user1 = userRepository.findUserById(1L);
+//
+//        PCRoom sixFloorPCRoom = pcRoomRepository.findPCRoomById(1L);
+//
+//        Seat newSeat = Seat.builder()
+//                .seatName("A1")
+//                .pcRoom(sixFloorPCRoom)
+//                .isUsing(true)
+//                .enabled(true)
+//                .user(user1)
+//                .build();
+//
+//        Seat newSeat1 = new Seat();
+//        newSeat1.setSeatName("A2");
+//        newSeat1.setPcRoom(sixFloorPCRoom);
+//        newSeat1.setUsing(false);
+//        newSeat1.setEnabled(true);
+//
+//        seatRepository.save(newSeat);
+//        seatRepository.save(newSeat1);
+//
+//        seatRepository.findAll().forEach(seat -> {
+//            System.out.println(seat);
+//        });
 
     }
 

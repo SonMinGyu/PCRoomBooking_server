@@ -1,19 +1,14 @@
 package com.example.pcroombooking.controller;
 
-import com.example.pcroombooking.domain.Cryptogram;
-import com.example.pcroombooking.exception.SuperException;
-import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
-import com.example.pcroombooking.repository.CryptogramRepository;
-import com.example.pcroombooking.service.CryptogramService;
-import com.example.pcroombooking.service.MailService;
+import com.example.pcroombooking.domain.PCRoom;
+import com.example.pcroombooking.domain.Seat;
+import com.example.pcroombooking.service.*;
 import com.example.pcroombooking.config.JwtTokenProvider;
 import com.example.pcroombooking.dto.*;
-import com.example.pcroombooking.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -23,9 +18,10 @@ public class ApiController {
     private final JwtTokenProvider jwtTokenProvider;
     private final MailService mailService;
     private final CryptogramService cryptogramService;
-    private final CryptogramRepository cryptogramRepository;
+    private final PCRoomService pcRoomService;
+    private final SeatService seatService;
 
-//    만약 어떤 resource를 식별하고 싶으면 Path Variable을 사용하고,
+//    만약 어떤 resource를 가져오고 싶으면 Path Variable을 사용하고,
 //    정렬이나 필터링을 한다면 Query Parameter를 사용하는 것이 Best Practice이다.
 
     private final UserService userService;
@@ -34,7 +30,7 @@ public class ApiController {
 
     @GetMapping("/user/test")
     public String test() {
-
+        System.out.println("성공!!!!!!!!!!!!!!");
         return "성공";
     }
 
@@ -54,12 +50,12 @@ public class ApiController {
     public UserLoginResponse login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
         // jwtToken 을 만들어서 userLoginResponse에 담아서 return 하자
 
-//        httpServletResponse.setHeader("Authorization", token);
 
         UserLoginResponse userLoginResponse = userService.loginUserInfo(userLoginRequest);
 
         if(userLoginResponse.getResultCode() == 200) {
             String token = jwtTokenProvider.createJwtToken(userLoginResponse.getEmail(), userLoginResponse.getAuthorities());
+//            httpServletResponse.setHeader("Authorization", token);
             userLoginResponse.setJwtToken(token);
         }
 
@@ -81,6 +77,26 @@ public class ApiController {
     public CryptogramResponse verityCryptogram(@RequestBody CryptogramRequest cryptogramRequest) {
         return cryptogramService.vefiryCryptogram(cryptogramRequest.getInputCryptogram(), cryptogramRequest.getInputEmail())
                 .toCryptogramResponse();
+    }
+
+    @GetMapping("/pcroom")
+    public PCRoomResponse getPCRooms() {
+        return pcRoomService.getPCRoomList();
+    }
+
+    @PostMapping("/pcroom/add-pcroom")
+    public PCRoom addPCRoom(@RequestBody PCRoom pcRoom) {
+        return pcRoomService.addPCRoom(pcRoom);
+    }
+
+    @GetMapping("/pcroom/seat/{pcRoomName}")
+    public SeatResponse getSeatsInPCRoom(@PathVariable String pcRoomName) {
+        return seatService.getSeatByPCRoom(pcRoomName);
+    }
+
+    @PostMapping("/pcroom/add-seat")
+    public Seat addSeat(@RequestBody SeatRequest seatRequest) {
+        return seatService.addSeat(seatRequest);
     }
 
 }

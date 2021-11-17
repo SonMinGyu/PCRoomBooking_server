@@ -1,4 +1,4 @@
-package com.example.pcroombooking.OuterProperties;
+package com.example.pcroombooking.outerProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,10 +21,10 @@ public class EmailProperties {
     public void initEmailProperties() {
         try {
             // PC버전 경로
-            FileReader resources= new FileReader("C:/Users/sk/Programming/PCRoomBooking_config/email_config.properties");
+//            FileReader resources= new FileReader("C:/Users/sk/Programming/PCRoomBooking_config/email_config.properties");
 
             // 노트북 버전 경로
-//            FileReader resources= new FileReader("C:/Users/littl/IdeaProjects/pcRoomBooking_config/email_config.properties");
+            FileReader resources= new FileReader("C:/Users/littl/IdeaProjects/pcRoomBooking_config/email_config.properties");
             Properties properties = new Properties();
 
             properties.load(resources);
