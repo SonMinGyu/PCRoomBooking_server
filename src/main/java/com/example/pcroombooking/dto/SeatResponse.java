@@ -14,7 +14,8 @@ import java.util.List;
 @Builder
 public class SeatResponse {
     private List<Seat> seats;
-    private int resultCode;
+    private int httpStatus;
+    private int responseCode;
     private String result;
-    private String message;
+    private String responseMessage;
 }

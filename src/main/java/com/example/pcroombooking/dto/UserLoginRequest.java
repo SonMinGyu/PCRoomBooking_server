@@ -23,5 +23,4 @@ public class UserLoginRequest {
                 .password(getPassword())
                 .build();
     }
-
 }

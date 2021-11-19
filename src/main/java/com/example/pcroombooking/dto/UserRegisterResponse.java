@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class UserRegisterResponse {
     private String name;
     private String email;
-    private int resultCode;
+    private int httpStatus;
+    private int responseCode;
     private String result;
-    private String message;
+    private String responseMessage;
 }

@@ -2,6 +2,7 @@ package com.example.pcroombooking.service;
 
 import com.example.pcroombooking.domain.PCRoom;
 import com.example.pcroombooking.dto.PCRoomResponse;
+import com.example.pcroombooking.dto.successType.SuccessType;
 import com.example.pcroombooking.exception.SuperException;
 import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 import com.example.pcroombooking.repository.PCRoomRepository;
@@ -20,9 +21,10 @@ public class PCRoomService {
 
         return PCRoomResponse.builder()
                 .pcRooms(pcRoomRepository.findAllByEnabledIsTrue().orElseThrow(() -> new SuperException(CustomExceptionType.PCROOM_NOT_FOUND_EXCEPTION)))
-                .resultCode(200)
-                .result("PC room search success")
-                .message("사용 가능한 PC실을 검색 완료하였습니다.")
+                .httpStatus(SuccessType.PCROOM_SEARCH_SUCCESS.getHttpStatus())
+                .responseCode(SuccessType.PCROOM_SEARCH_SUCCESS.getResponseCode())
+                .result(SuccessType.PCROOM_SEARCH_SUCCESS.getResult())
+                .responseMessage(SuccessType.PCROOM_SEARCH_SUCCESS.getResponseMessage())
                 .build();
     }
 

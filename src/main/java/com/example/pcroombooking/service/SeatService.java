@@ -4,6 +4,7 @@ import com.example.pcroombooking.domain.PCRoom;
 import com.example.pcroombooking.domain.Seat;
 import com.example.pcroombooking.dto.SeatRequest;
 import com.example.pcroombooking.dto.SeatResponse;
+import com.example.pcroombooking.dto.successType.SuccessType;
 import com.example.pcroombooking.exception.SuperException;
 import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 import com.example.pcroombooking.repository.PCRoomRepository;
@@ -24,9 +25,10 @@ public class SeatService {
     public SeatResponse getSeatByPCRoom(String pcRoomName) {
         return SeatResponse.builder()
                 .seats(seatRepository.findByPcRoom_Name(pcRoomName).orElseThrow(() -> new SuperException(CustomExceptionType.SEAT_NOT_IN_PCROOM_EXCEPTION)))
-                .resultCode(200)
-                .result("Seats search success")
-                .message(pcRoomName + " 좌석을 모두 가져왔습니다.")
+                .httpStatus(SuccessType.SEAT_SEARCH_SUCCESS.getHttpStatus())
+                .responseCode(SuccessType.SEAT_SEARCH_SUCCESS.getResponseCode())
+                .result(SuccessType.SEAT_SEARCH_SUCCESS.getResult())
+                .responseMessage(pcRoomName + SuccessType.SEAT_SEARCH_SUCCESS.getResponseMessage())
                 .build();
     }
 

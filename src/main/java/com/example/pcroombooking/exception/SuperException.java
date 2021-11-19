@@ -1,6 +1,5 @@
 package com.example.pcroombooking.exception;
 
-import com.example.pcroombooking.exception.exceptionResponse.ExceptionResponse;
 import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 
 public class SuperException extends RuntimeException{

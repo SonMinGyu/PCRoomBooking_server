@@ -15,9 +15,10 @@ import java.util.Set;
 @Builder
 public class UserLoginResponse {
     private String jwtToken;
-    private int resultCode;
+    private int httpStatus;
+    private int responseCode;
     private String result;
-    private String message;
+    private String responseMessage;
     private String email;
     private Set<Authority> authorities;
 }

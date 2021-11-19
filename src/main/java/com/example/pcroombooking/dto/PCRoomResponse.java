@@ -14,8 +14,8 @@ import java.util.List;
 @Builder
 public class PCRoomResponse {
     private List<PCRoom> pcRooms;
-    private int resultCode;
+    private int httpStatus;
+    private int responseCode;
     private String result;
-    private String message;
-
+    private String responseMessage;
 }

@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ExceptionResponse {
-    private int errorCode;
     private int httpStatus;
-    private String errorMessage;
+    private int responseCode;
+    private String result;
+    private String responseMessage;
 }

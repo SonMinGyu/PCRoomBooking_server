@@ -50,10 +50,9 @@ public class ApiController {
     public UserLoginResponse login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
         // jwtToken 을 만들어서 userLoginResponse에 담아서 return 하자
 
-
         UserLoginResponse userLoginResponse = userService.loginUserInfo(userLoginRequest);
 
-        if(userLoginResponse.getResultCode() == 200) {
+        if(userLoginResponse.getHttpStatus() == 200 && userLoginResponse.getResponseCode() == 2000) {
             String token = jwtTokenProvider.createJwtToken(userLoginResponse.getEmail(), userLoginResponse.getAuthorities());
 //            httpServletResponse.setHeader("Authorization", token);
             userLoginResponse.setJwtToken(token);

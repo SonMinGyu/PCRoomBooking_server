@@ -1,5 +1,6 @@
 package com.example.pcroombooking.service;
 
+import com.example.pcroombooking.dto.successType.SuccessType;
 import com.example.pcroombooking.outerProperties.EmailProperties;
 import com.example.pcroombooking.dto.EmailSendRequest;
 import com.example.pcroombooking.dto.EmailSendResponse;
@@ -92,9 +93,10 @@ public class MailService {
         }
 
         return EmailSendResponse.builder()
-                .resultCode(200)
-                .result("Send Success")
-                .message("메일을 성공적으로 발송했습니다.")
+                .httpStatus(SuccessType.EMAIL_SEND_SUCCESS.getHttpStatus())
+                .responseCode(SuccessType.EMAIL_SEND_SUCCESS.getResponseCode())
+                .result(SuccessType.EMAIL_SEND_SUCCESS.getResult())
+                .responseMessage(SuccessType.EMAIL_SEND_SUCCESS.getResponseMessage())
                 .build();
     }
 

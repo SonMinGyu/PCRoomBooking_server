@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class EmailSendResponse {
-    private int resultCode;
+    private int httpStatus;
+    private int responseCode;
     private String result;
-    private String message;
+    private String responseMessage;
 }

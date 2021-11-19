@@ -12,5 +12,9 @@ import lombok.NoArgsConstructor;
 public class CryptogramResponse {
 
     private boolean verified;
+    private int httpStatus;
+    private int responseCode;
+    private String result;
+    private String responseMessage;
 
 }
