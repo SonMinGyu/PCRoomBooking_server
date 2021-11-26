@@ -74,8 +74,7 @@ public class ApiController {
 
     @PostMapping("/user/register/cryptogram")
     public CryptogramResponse verityCryptogram(@RequestBody CryptogramRequest cryptogramRequest) {
-        return cryptogramService.vefiryCryptogram(cryptogramRequest.getInputCryptogram(), cryptogramRequest.getInputEmail())
-                .toCryptogramResponse();
+        return cryptogramService.vefiryCryptogram(cryptogramRequest.getInputCryptogram(), cryptogramRequest.getInputEmail());
     }
 
     @GetMapping("/pcroom")

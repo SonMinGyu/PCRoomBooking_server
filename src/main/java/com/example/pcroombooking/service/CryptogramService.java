@@ -1,6 +1,8 @@
 package com.example.pcroombooking.service;
 
 import com.example.pcroombooking.domain.Cryptogram;
+import com.example.pcroombooking.dto.CryptogramResponse;
+import com.example.pcroombooking.dto.successType.SuccessType;
 import com.example.pcroombooking.exception.SuperException;
 import com.example.pcroombooking.exception.exceptionType.CustomExceptionType;
 import com.example.pcroombooking.repository.CryptogramRepository;
@@ -28,7 +30,7 @@ public class CryptogramService {
         return cryptogramRepository.save(newCrytogram);
     }
 
-    public Cryptogram vefiryCryptogram(String inputCryptogram, String inputEmail) {
+    public CryptogramResponse vefiryCryptogram(String inputCryptogram, String inputEmail) {
         Cryptogram crt = cryptogramRepository.findByCryptogramAndTargetEmailOrderByCreatedAtDesc(inputCryptogram, inputEmail)
         .orElseThrow(() -> new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_FOUNT_EXCEPTION));
 
@@ -41,7 +43,14 @@ public class CryptogramService {
             Cryptogram findByIdCrt = cryptogramRepository.findById(id).orElseThrow(() -> new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_FOUNT_EXCEPTION));
             findByIdCrt.setVerified(true);
 
-            return cryptogramRepository.save(findByIdCrt);
+            CryptogramResponse cryptogramResponse = cryptogramRepository.save(findByIdCrt).toCryptogramResponse();
+
+            cryptogramResponse.setHttpStatus(SuccessType.CRYPTOGRAM_VERIFY_SUCCESS.getHttpStatus());
+            cryptogramResponse.setResponseCode(SuccessType.CRYPTOGRAM_VERIFY_SUCCESS.getResponseCode());
+            cryptogramResponse.setResult(SuccessType.CRYPTOGRAM_VERIFY_SUCCESS.getResult());
+            cryptogramResponse.setResponseMessage(SuccessType.CRYPTOGRAM_VERIFY_SUCCESS.getResponseMessage());
+
+            return cryptogramResponse;
         }
     }
 
