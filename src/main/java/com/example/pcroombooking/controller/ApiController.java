@@ -1,5 +1,7 @@
 package com.example.pcroombooking.controller;
 
+import com.example.pcroombooking.domain.ConferenceRoom;
+import com.example.pcroombooking.domain.ConferenceRoomReservation;
 import com.example.pcroombooking.domain.PCRoom;
 import com.example.pcroombooking.domain.Seat;
 import com.example.pcroombooking.service.*;
@@ -20,6 +22,8 @@ public class ApiController {
     private final CryptogramService cryptogramService;
     private final PCRoomService pcRoomService;
     private final SeatService seatService;
+    private final ConferenceRoomService conferenceRoomService;
+    private final ConferenceRoomReservationService conferenceRoomReservationService;
 
 //    만약 어떤 resource를 가져오고 싶으면 Path Variable을 사용하고,
 //    정렬이나 필터링을 한다면 Query Parameter를 사용하는 것이 Best Practice이다.
@@ -95,6 +99,28 @@ public class ApiController {
     @PostMapping("/pcroom/add-seat")
     public Seat addSeat(@RequestBody SeatRequest seatRequest) {
         return seatService.addSeat(seatRequest);
+    }
+
+    @GetMapping("/conferenceroom")
+    public ConferenceRoomResponse getConferenceRooms() {
+        return conferenceRoomService.getConferenceRoomList();
+    }
+
+    @PostMapping("/conferenceroom/add-conferenceroom")
+    public ConferenceRoom addConferenceRoom(@RequestBody ConferenceRoomRequest conferenceRoomRequest) {
+        return conferenceRoomService.addConferenceRoom(conferenceRoomRequest);
+    }
+
+    // 팀플실 예약
+    @PostMapping("/conferenceroom/reserve")
+    public ConferenceRoomReservationAddResponse reserveConferenceRoom(@RequestBody ConferenceRoomReservationAddRequestList conferenceRoomReservationAddRequestList) {
+        return conferenceRoomReservationService.addConferenceRoomReservation(conferenceRoomReservationAddRequestList);
+    }
+
+    // 특정 팀플룸의 모든 예약 가져오기
+    @PostMapping("/conferenceroom/reservation")
+    public ConferenceRoomReservationGetResponse getConferenceRoomReservations(@RequestBody ConferenceRoomReservationGetRequest conferenceRoomReservationGetRequest) {
+        return conferenceRoomReservationService.getConferenceRoomReservations(conferenceRoomReservationGetRequest);
     }
 
 }

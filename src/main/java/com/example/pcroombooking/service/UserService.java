@@ -86,9 +86,7 @@ public class UserService implements UserDetailsService {
         savedUserResponse.setResponseMessage(SuccessType.REGISTER_SUCCESS.getResponseMessage());
 
         // 회원가입 완료한 cryptogram 삭제
-        List<Cryptogram> deleteCryptogramList = cryptogramRepository.findByCryptogramAndTargetEmail(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail())
-                .orElseThrow(() -> new SuperException(CustomExceptionType.CRYPTOGRAM_NOT_FOUNT_EXCEPTION));
-
+        List<Cryptogram> deleteCryptogramList = cryptogramRepository.findByCryptogramAndTargetEmail(userRegisterRequest.getCryptogram(), userRegisterRequest.getEmail());
         List<Long> deleteIdList = deleteCryptogramList.stream().map(s -> s.getId()).collect(Collectors.toList());
 
         cryptogramRepository.deleteAllById(deleteIdList);

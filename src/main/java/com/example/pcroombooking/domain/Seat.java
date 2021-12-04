@@ -22,6 +22,7 @@ public class Seat extends TimeBaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     private PCRoom pcRoom; // 좌석이 어느 PC실에 있는가
+    private String pcRoomName;
 
     @NonNull
     private String seatName; // 좌석 이름(ex - A15)

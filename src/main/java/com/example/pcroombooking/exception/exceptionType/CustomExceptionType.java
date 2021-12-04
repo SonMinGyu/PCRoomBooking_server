@@ -13,8 +13,14 @@ public enum CustomExceptionType {
     CRYPTOGRAM_NOT_VERIFIED_EXCEPTION(200, 1004,"CRYPTOGRAM_NOT_VERIFIED_EXCEPTION",  "문자열 인증이 완료되지 않았습니다. 인증을 완료해주세요."),
     // register cryptogram 인증이 완료되지 않았을 때 발생
     CRYPTOGRAM_SAVE_EXCEPTION(200, 1005, "CRYPTOGRAM_SAVE_EXCEPTION", "오류로 인해 문자열이 저장되지 않았습니다."), // 문자열 저장 실패
-    PCROOM_NOT_FOUND_EXCEPTION(200, 1006,"PCROOM_NOT_FOUND_EXCEPTION",  "사용가능한 PC실이 검색되지 않았습니다."), // 사용가능한 PC실이 없을 때
-    SEAT_NOT_IN_PCROOM_EXCEPTION(200, 1007,"SEAT_NOT_IN_PCROOM_EXCEPTION",  "해당 PC실의 좌석이 검색되지 않았습니다."); // 해당 PC실의 좌석이 없을 때
+    PCROOM_NOT_FOUND_EXCEPTION(200, 1006,"PCROOM_NOT_FOUND_EXCEPTION",  "검색된 PC실이 없습니다."), // PC실이 검색되지 않았을 때
+    SEAT_NOT_IN_PCROOM_EXCEPTION(200, 1007,"SEAT_NOT_IN_PCROOM_EXCEPTION",  "해당 PC실의 좌석이 검색되지 않았습니다."), // 해당 PC실의 좌석이 없을 때
+    CONFERENCEROOM_NOT_FOUND_EXCEPTION(200, 1008,"CONFERENCEROOM_NOT_FOUND_EXCEPTION",  "검색된 팀플실이 없습니다."), // 팀플실이 검색되지 않았을 때
+    CONFERENCEROOM_NOT_EXIST_EXCEPTION(200, 1009,"CONFERENCEROOM_NOT_EXIST_EXCEPTION",  "예약하려는 팀플실이 존재하지 않습니다."), // 예약하려는 팀플실이 존재하지 않을 때
+    PCROOM_NOT_EXIST_EXCEPTION(200, 1010,"PCROOM_NOT_EXIST_EXCEPTION",  "예약하려는 PC실이 존재하지 않습니다."), // 예약하려는 PC실이 존재하지 않울 때
+    SEAT_SAVE_FAIL_EXCEPTION(200, 1011,"SEAT_SAVE_FAIL_EXCEPTION",  "좌석 생성에 실패하셨습니다. 다시 시도해주세요."), // 좌석 생성 실패
+    CONFERENCEROOM_RESERVATION_SAVE_FAIL_EXCEPTION(200, 1012,"CONFERENCEROOM_RESERVATION_SAVE_FAIL_EXCEPTION",  "팀플실 예약에 실패하셨습니다. 다시 시도해주세요."), // 팀플실 예약 실패
+    CONFERENCEROOM_RESERVATION_NOT_FOUND_EXCEPTION(200, 1013,"CONFERENCEROOM_RESERVATION_NOT_FOUND_EXCEPTION",  "해당 팀플실 예약이 아직 없습니다."); // 해당 팀플실 예약이 아직 없을 때
 
     private int httpStatus;
     private int responseCode;

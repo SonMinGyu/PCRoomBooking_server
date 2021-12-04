@@ -10,5 +10,5 @@ public interface CryptogramRepository extends JpaRepository<Cryptogram, Long> {
 
     Optional<Cryptogram> findByCryptogramAndTargetEmailOrderByCreatedAtDesc(String cryptogram, String targetEamil);
 
-    Optional<List<Cryptogram>> findByCryptogramAndTargetEmail(String cryptogram, String targetEamil);
+    List<Cryptogram> findByCryptogramAndTargetEmail(String cryptogram, String targetEamil);
 }

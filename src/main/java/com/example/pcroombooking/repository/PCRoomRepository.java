@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PCRoomRepository extends JpaRepository<PCRoom, Long> {
 
-    Optional<List<PCRoom>> findAllByEnabledIsTrue();
+    List<PCRoom> findAllByEnabledIsTrue();
 
     Optional<PCRoom> findByName(String name);
 }
