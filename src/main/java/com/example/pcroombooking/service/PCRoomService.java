@@ -1,6 +1,8 @@
 package com.example.pcroombooking.service;
 
 import com.example.pcroombooking.domain.PCRoom;
+import com.example.pcroombooking.dto.PCRoomAddRequest;
+import com.example.pcroombooking.dto.PCRoomAddResponse;
 import com.example.pcroombooking.dto.PCRoomResponse;
 import com.example.pcroombooking.dto.successType.SuccessType;
 import com.example.pcroombooking.exception.SuperException;
@@ -34,24 +36,14 @@ public class PCRoomService {
                 .build();
     }
 
-    public PCRoom addPCRoom(PCRoom pcRoom) {
-        return pcRoomRepository.save(
-                PCRoom.builder()
-                        .name(pcRoom.getName())
-                        .buildingNumber(pcRoom.getBuildingNumber())
-                        .layer(pcRoom.getLayer())
-                        .allSeatNumber(pcRoom.getAllSeatNumber())
-                        .pcSeatNumber(pcRoom.getPcSeatNumber())
-                        .pcSeatBrokenNumber(pcRoom.getPcSeatBrokenNumber())
-                        .pcSeatInUseNumber(pcRoom.getPcSeatInUseNumber())
-                        .pcSeatUseableNumber(pcRoom.getPcSeatUseableNumber())
-                        .notebookSeatNumber(pcRoom.getNotebookSeatNumber())
-                        .notebookSeatBrokenNumber(pcRoom.getNotebookSeatBrokenNumber())
-                        .notebookSeatInUseNumber(pcRoom.getNotebookSeatInUseNumber())
-                        .notebookSeatUseableNumber(pcRoom.getNotebookSeatUseableNumber())
-                        .enabled(pcRoom.isEnabled())
-                        .build()
-        );
+    public PCRoomAddResponse addPCRoom(PCRoomAddRequest pcRoomAddRequest) {
+        return PCRoomAddResponse.builder()
+                .pcRoom(pcRoomRepository.save(pcRoomAddRequest.toPCRoom()))
+                .httpStatus(SuccessType.PCROOM_ADD_SUCCESS.getHttpStatus())
+                .responseCode(SuccessType.PCROOM_ADD_SUCCESS.getResponseCode()).
+                result(SuccessType.PCROOM_ADD_SUCCESS.getResult())
+                .responseMessage(SuccessType.PCROOM_ADD_SUCCESS.getResponseMessage())
+                .build();
     }
 
 

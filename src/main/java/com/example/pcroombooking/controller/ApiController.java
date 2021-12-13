@@ -87,8 +87,8 @@ public class ApiController {
     }
 
     @PostMapping("/pcroom/add-pcroom")
-    public PCRoom addPCRoom(@RequestBody PCRoom pcRoom) {
-        return pcRoomService.addPCRoom(pcRoom);
+    public PCRoomAddResponse addPCRoom(@RequestBody PCRoomAddRequest pcRoomAddRequest) {
+        return pcRoomService.addPCRoom(pcRoomAddRequest);
     }
 
     @GetMapping("/pcroom/seat/{pcRoomName}")

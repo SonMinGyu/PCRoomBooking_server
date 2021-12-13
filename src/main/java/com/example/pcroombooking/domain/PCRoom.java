@@ -24,6 +24,9 @@ public class PCRoom extends TimeBaseEntity {
     private String name;
     private Integer buildingNumber; // PC실 있는 건물 번호
     private Integer layer; // PC실 있는 층
+    private Integer pcRoomLine;
+    private Integer pcRoomRow;
+    private String seatsStr;
     @NonNull
     private Integer allSeatNumber; // PC실의 모든 좌석개수
     private Integer pcSeatNumber;
