@@ -1,10 +1,13 @@
 package com.example.pcroombooking.dto;
 
 import com.example.pcroombooking.domain.PCRoom;
+import com.example.pcroombooking.domain.Seat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,6 +23,7 @@ public class PCRoomAddRequest {
     private int allSeatNumber;
     private int pcSeatNumber;
     private int notebookSeatNumber;
+    private List<Seat> seats;
     private boolean enabled;
 
     public PCRoom toPCRoom() {
@@ -39,6 +43,7 @@ public class PCRoomAddRequest {
                 .notebookSeatBrokenNumber(0)
                 .notebookSeatInUseNumber(0)
                 .notebookSeatUseableNumber(notebookSeatNumber)
+                .seats(seats)
                 .enabled(enabled)
                 .build();
     }

@@ -12,4 +12,5 @@ public interface PCRoomRepository extends JpaRepository<PCRoom, Long> {
     List<PCRoom> findAllByEnabledIsTrue();
 
     Optional<PCRoom> findByName(String name);
+
 }

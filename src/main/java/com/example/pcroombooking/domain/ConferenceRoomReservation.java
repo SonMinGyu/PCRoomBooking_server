@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class ConferenceRoomReservation extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long reservationId;
     private String conferenceRoomName;
 

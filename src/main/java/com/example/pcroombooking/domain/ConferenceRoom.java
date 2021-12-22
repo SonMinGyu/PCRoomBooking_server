@@ -17,7 +17,7 @@ import java.util.List;
 public class ConferenceRoom extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private Integer buildingNumber;

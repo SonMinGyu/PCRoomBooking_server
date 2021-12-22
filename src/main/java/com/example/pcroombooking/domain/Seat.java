@@ -16,13 +16,13 @@ import javax.persistence.*;
 public class Seat extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long seatId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     private PCRoom pcRoom; // 좌석이 어느 PC실에 있는가
-    private String pcRoomName;
+    private String pcroomName;
 
     @NonNull
     private String seatName; // 좌석 이름(ex - A15)
@@ -31,6 +31,12 @@ public class Seat extends TimeBaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "id"))
     @ToString.Exclude
     private User user; // seat에서 사용하는 user 수정
+
+    private String userEmail;
+
+    private String seatType;
+
+    private boolean booked; // 예약 여부
 
     @NonNull
     private boolean isUsing; // 좌석 사용 중 여부

@@ -1,9 +1,6 @@
 package com.example.pcroombooking.controller;
 
 import com.example.pcroombooking.domain.ConferenceRoom;
-import com.example.pcroombooking.domain.ConferenceRoomReservation;
-import com.example.pcroombooking.domain.PCRoom;
-import com.example.pcroombooking.domain.Seat;
 import com.example.pcroombooking.service.*;
 import com.example.pcroombooking.config.JwtTokenProvider;
 import com.example.pcroombooking.dto.*;
@@ -81,9 +78,14 @@ public class ApiController {
         return cryptogramService.vefiryCryptogram(cryptogramRequest.getInputCryptogram(), cryptogramRequest.getInputEmail());
     }
 
-    @GetMapping("/pcroom")
-    public PCRoomResponse getPCRooms() {
+    @GetMapping("/pcrooms")
+    public PCRoomsResponse getPCRooms() {
         return pcRoomService.getPCRoomList();
+    }
+
+    @PostMapping("/pcroom")
+    public PCRoomGetResponse getPCRoom(@RequestBody PCRoomGetRequest pcRoomGetRequest) {
+        return pcRoomService.getPCRoom(pcRoomGetRequest);
     }
 
     @PostMapping("/pcroom/add-pcroom")
@@ -91,15 +93,31 @@ public class ApiController {
         return pcRoomService.addPCRoom(pcRoomAddRequest);
     }
 
+    @PostMapping("/pcroom/update-pcroom")
+    public PCRoomUpdateResponse updatePCRoom(@RequestBody PCRoomUpdateRequest pcRoomUpdateRequest) {
+        return pcRoomService.updatePCRoom(pcRoomUpdateRequest);
+    }
+
+
     @GetMapping("/pcroom/seat/{pcRoomName}")
     public SeatResponse getSeatsInPCRoom(@PathVariable String pcRoomName) {
         return seatService.getSeatByPCRoom(pcRoomName);
     }
 
+
     @PostMapping("/pcroom/add-seat")
-    public Seat addSeat(@RequestBody SeatRequest seatRequest) {
-        return seatService.addSeat(seatRequest);
+    public SeatAddResponse addSeat(@RequestBody SeatAddRequest seatAddRequest) {
+        return seatService.addSeat(seatAddRequest);
     }
+
+    @PostMapping("/pcroom/update-seat")
+    public SeatUpdateResponse updateSeat(@RequestBody SeatUpdateRequest seatUpdateRequest) {
+        return seatService.updateSeat(seatUpdateRequest);
+    }
+
+
+
+
 
     @GetMapping("/conferenceroom")
     public ConferenceRoomResponse getConferenceRooms() {

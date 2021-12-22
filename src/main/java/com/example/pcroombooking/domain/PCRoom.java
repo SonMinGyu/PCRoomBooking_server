@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +18,8 @@ import java.util.Set;
 public class PCRoom extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NonNull
     private String name;
@@ -41,6 +42,6 @@ public class PCRoom extends TimeBaseEntity {
     @JoinColumn(foreignKey = @ForeignKey(name = "seatId"))
     @JsonManagedReference
     @ToString.Exclude
-    private Set<Seat> seats;
+    private List<Seat> seats;
     private boolean enabled; // 사용 가능 여부(교수님의 수업, 공사중, 집합금지로 인한 이유 등일 때 false)
 }

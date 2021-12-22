@@ -30,6 +30,9 @@ public class UserRegisterRequest {
                 .password(getPassword())
                 .studentNumber(getStudentNumber())
                 .major(getMajor())
+                .seatBook(false)
+                .seatUse(false)
+                .enabled(true)
                 .build();
     }
 

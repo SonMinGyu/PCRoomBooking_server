@@ -21,10 +21,11 @@ import java.util.Set;
 @Entity
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Table(name = "USER_TABLE")
 public class User extends TimeBaseEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NonNull
@@ -42,6 +43,10 @@ public class User extends TimeBaseEntity implements UserDetails {
 
     @OneToOne(mappedBy = "user")
     private Seat seat; // 사용중인 좌석, 읽기 전용
+
+    private Boolean seatBook;
+    
+    private Boolean seatUse;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(foreignKey = @ForeignKey(name = "userId"))

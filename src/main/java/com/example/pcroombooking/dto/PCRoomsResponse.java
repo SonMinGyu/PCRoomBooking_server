@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PCRoomResponse {
+public class PCRoomsResponse {
     private List<PCRoom> pcRooms;
     private int httpStatus;
     private int responseCode;
