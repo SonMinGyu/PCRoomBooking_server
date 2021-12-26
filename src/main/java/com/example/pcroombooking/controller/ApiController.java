@@ -104,7 +104,17 @@ public class ApiController {
         return seatService.getSeatByPCRoom(pcRoomName);
     }
 
+    @PostMapping("/pcroom/inspection")
+    public PCRoomInspectionResponse inspectionResponse(@RequestBody PCRoomInspectionRequest pcRoomInspectionRequest) {
+        return pcRoomService.inspectionPCRoom(pcRoomInspectionRequest);
+    }
 
+    @PostMapping("/pcroom/update")
+    public SeatBookOrUseResponse updateSelectSeat(@RequestBody SeatBookOrUseRequest seatBookOrUseRequest) {
+        return seatService.updateSelectSeat(seatBookOrUseRequest);
+    }
+
+    ///////////////////
     @PostMapping("/pcroom/add-seat")
     public SeatAddResponse addSeat(@RequestBody SeatAddRequest seatAddRequest) {
         return seatService.addSeat(seatAddRequest);
@@ -114,6 +124,8 @@ public class ApiController {
     public SeatUpdateResponse updateSeat(@RequestBody SeatUpdateRequest seatUpdateRequest) {
         return seatService.updateSeat(seatUpdateRequest);
     }
+    ///////////////////
+
 
 
 

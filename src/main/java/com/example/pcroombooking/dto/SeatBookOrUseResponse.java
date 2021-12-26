@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SeatUpdateResponse {
-    private List<Seat> seats;
+public class SeatBookOrUseResponse {
+    private Seat seat;
     private int httpStatus;
     private int responseCode;
     private String result;

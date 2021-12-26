@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -60,17 +61,18 @@ public class PCRoomService {
 
         pcRoom.setSeatsStr(pcRoomUpdateRequest.getSeatsStr());
 
-        List<Seat> newSeats = pcRoom.getSeats();
-        newSeats.forEach(seat -> {
-            if(seat.getSeatName().equals(pcRoomUpdateRequest.getSeatName())) {
-                seat.setSeatType(pcRoomUpdateRequest.getViewTag());
-                seat.setBooked(pcRoomUpdateRequest.getBooked());
-                seat.setUsing(pcRoomUpdateRequest.getInuse());
-                seat.setUserEmail(pcRoomUpdateRequest.getUserEmail());
-            }
-        });
+        pcRoom.setSeats(pcRoomUpdateRequest.getSeats());
 
-        pcRoom.setSeats(newSeats);
+//        List<Seat> newSeats = pcRoom.getSeats();
+//        newSeats.forEach(seat -> {
+//            if(seat.getSeatName().equals(pcRoomUpdateRequest.getSeatName())) {
+//                seat.setSeatType(pcRoomUpdateRequest.getViewTag());
+//                seat.setBooked(pcRoomUpdateRequest.getBooked());
+//                seat.setUsing(pcRoomUpdateRequest.getInuse());
+//                seat.setUserEmail(pcRoomUpdateRequest.getUserEmail());
+//            }
+//        });
+//        pcRoom.setSeats(newSeats);
 
         return PCRoomUpdateResponse.builder()
                 .pcRoom(pcRoomRepository.save(pcRoom))
@@ -78,6 +80,21 @@ public class PCRoomService {
                 .responseCode(SuccessType.PCROOM_UPDATE_SUCCESS.getResponseCode())
                 .result(SuccessType.PCROOM_UPDATE_SUCCESS.getResult())
                 .responseMessage(SuccessType.PCROOM_UPDATE_SUCCESS.getResponseMessage())
+                .build();
+    }
+
+    public PCRoomInspectionResponse inspectionPCRoom(PCRoomInspectionRequest pcRoomInspectionRequest) {
+
+        Optional<PCRoom> isExistSamePCRoomName = pcRoomRepository.findByName(pcRoomInspectionRequest.getPcroomName());
+        if(isExistSamePCRoomName.isPresent()) {
+            throw new SuperException(CustomExceptionType.PCROOM_NAME_IDENTICAL_EXCEPTION);
+        }
+
+        return PCRoomInspectionResponse.builder()
+                .httpStatus(SuccessType.PCROOM_NAME_CAN_USE_SUCCESS.getHttpStatus())
+                .responseCode(SuccessType.PCROOM_NAME_CAN_USE_SUCCESS.getResponseCode())
+                .result(SuccessType.PCROOM_NAME_CAN_USE_SUCCESS.getResult())
+                .responseMessage(SuccessType.PCROOM_NAME_CAN_USE_SUCCESS.getResponseMessage())
                 .build();
     }
 

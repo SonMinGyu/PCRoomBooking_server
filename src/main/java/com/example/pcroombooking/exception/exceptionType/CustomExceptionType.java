@@ -23,7 +23,9 @@ public enum CustomExceptionType {
     CONFERENCEROOM_RESERVATION_NOT_FOUND_EXCEPTION(200, 1013,"CONFERENCEROOM_RESERVATION_NOT_FOUND_EXCEPTION",  "해당 팀플실 예약이 아직 없습니다."), // 해당 팀플실 예약이 아직 없을 때
     PCROOM_SEARCH_FAIL_EXCEPTION(200, 1014,"PCROOM_SEARCH_FAIL_EXCEPTION",  "선택하신 PC실이 없습니다. 새로고침 후 다시 시도해주세요."), // 선택한 PC실이 없을 때
     SEAT_NOT_FOUND_EXCEPTION(200, 1015,"SEAT_NOT_FOUND_EXCEPTION",  "해당 좌석을 찾을 수 없습니다."), // 업데이트 할 좌석을 찾지 못했을 때
-    SEAT_ALREADY_RESERVED_EXCEPTION(200, 1016,"SEAT_ALREADY_RESERVED_EXCEPTION",  "해당 좌석은 이미 예약되었습니다. 새로고침 후 다시 시도해주세요"); // 업데이트 할 좌석을 찾지 못했을 때
+    SEAT_ALREADY_RESERVED_EXCEPTION(200, 1016,"SEAT_ALREADY_RESERVED_EXCEPTION",  "해당 좌석은 이미 예약되었습니다. 새로고침 후 다시 시도해주세요"), // 이미 예약된 좌석을 예약하려 할 때
+    PCROOM_NAME_IDENTICAL_EXCEPTION(200, 1017,"PCROOM_NAME_IDENTICAL_EXCEPTION",  "같은 이름의 PC실이 존재합니다. 이름을 변경해주세요"), // 같은 이름의 PC실이 존재할 때
+    USER_NOT_FOUND_EXCEPTION(200, 1018,"USER_NOT_FOUND_EXCEPTION",  "예약하려는 User 정보가 없습니다. 다시 로그인 후 시도해주세요."); // 예약하려는 유저의 정보가 존재하지 않을때
 
     private int httpStatus;
     private int responseCode;

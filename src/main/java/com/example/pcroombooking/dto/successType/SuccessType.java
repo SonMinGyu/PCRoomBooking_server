@@ -18,7 +18,8 @@ public enum SuccessType {
     PCROOM_GET_SUCCESS(200, 2010, "PCROOM_GET_SUCCESS", "해당 PC실 찾기에 성공하였습니다."),
     PCROOM_UPDATE_SUCCESS(200, 2011, "PCROOM_UPDATE_SUCCESS", "PC실 업데이트에 성공하였습니다."),
     SEAT_ADD_SUCCESS(200, 2012, "SEAT_ADD_SUCCESS", "좌석 추가에 성공하였습니다."),
-    SEAT_UPDATE_SUCCESS(200, 2013, "SEAT_UPDATE_SUCCESS", "좌석 업데이트에 성공하였습니다.");
+    SEAT_UPDATE_SUCCESS(200, 2013, "SEAT_UPDATE_SUCCESS", "좌석 업데이트에 성공하였습니다."),
+    PCROOM_NAME_CAN_USE_SUCCESS(200, 2014, "PCROOM_NAME_CAN_USE_SUCCESS", "해당 PC실 이름을 사용할 수 있습니다.");
 
     private int httpStatus;
     private int responseCode;
