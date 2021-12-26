@@ -21,10 +21,10 @@ public class EmailProperties {
     public void initEmailProperties() {
         try {
             // PC버전 경로
-//            FileReader resources= new FileReader("C:/Users/sk/Programming/PCRoomBooking_config/email_config.properties");
+            FileReader resources= new FileReader("C:/Users/MinGyu/DeskTop/Programming/PCRoomBooking_config/email_config.properties");
 
             // 노트북 버전 경로
-            FileReader resources= new FileReader("C:/Users/littl/IdeaProjects/pcRoomBooking_config/email_config.properties");
+//            FileReader resources= new FileReader("C:/Users/littl/IdeaProjects/pcRoomBooking_config/email_config.properties");
             Properties properties = new Properties();
 
             properties.load(resources);

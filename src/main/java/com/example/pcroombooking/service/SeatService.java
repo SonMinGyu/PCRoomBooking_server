@@ -130,13 +130,6 @@ public class SeatService {
         user.setSeat(seat);
         userRepository.save(user);
 
-
-        // 실험중 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if(true) {
-            throw new SuperException(CustomExceptionType.SEAT_ALREADY_RESERVED_EXCEPTION);
-        }
-
-
         // seatRepository 업데이트
         List<Seat> getSeats = seatRepository.findByPcRoom_Name(pcroomName);
         System.out.println("getSeats: " + getSeats);
